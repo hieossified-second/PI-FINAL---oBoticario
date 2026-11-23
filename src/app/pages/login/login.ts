@@ -1,16 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   perfil: 'cliente' | 'admin' = 'cliente';
   nome = '';
   email = '';
@@ -18,6 +18,18 @@ export class LoginComponent {
   erro = '';
 
   constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    const perfilSalvo = localStorage.getItem('perfilUsuario');
+    if (perfilSalvo === 'admin' || perfilSalvo === 'cliente') {
+      this.perfil = perfilSalvo;
+    }
+
+    const nomeSalvo = localStorage.getItem('usuarioLogado');
+    if (nomeSalvo && nomeSalvo !== 'Visitante') {
+      this.nome = nomeSalvo;
+    }
+  }
 
   selecionarPerfil(tipo: 'cliente' | 'admin'): void {
     this.perfil = tipo;
@@ -34,12 +46,12 @@ export class LoginComponent {
       this.nome.trim() ||
       (this.perfil === 'admin' ? 'Administrador' : this.email.split('@')[0]);
 
-    // Salva no localStorage para o LojaService e o painel exibirem o nome
     localStorage.setItem('usuarioLogado', nomeExibicao);
+    localStorage.setItem('emailUsuario', this.email.trim());
     localStorage.setItem('perfilUsuario', this.perfil);
 
     if (this.perfil === 'admin') {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/inicio-adm']);
     } else {
       this.router.navigate(['/inicio']);
     }

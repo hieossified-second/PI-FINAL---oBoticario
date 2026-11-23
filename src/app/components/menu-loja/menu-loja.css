@@ -138,4 +138,11 @@ aside nav a.btn-login-menu:active {
   .slogan {
     display: none;
   }
+  
+}
+
+@media (max-width: 760px) {
+  .item-carrinho {
+    display: none;
+  }
 }

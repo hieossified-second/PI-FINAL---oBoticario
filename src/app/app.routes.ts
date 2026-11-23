@@ -12,20 +12,22 @@ import { Suporte } from './clientelas/suporte/suporte';
 import { Loja } from './clientelas/loja/loja';
 
 export const routes: Routes = [
-  // Tela inicial principal agora é a Home da Loja (Cliente)
+  // 1. Início principal (Loja / Cliente)
   { path: '', component: Inicio },
   { path: 'inicio', component: Inicio },
 
-  // Loja (Área do Cliente)
+  // Demais rotas da Loja (Cliente)
   { path: 'produtos', component: Produtos },
   { path: 'meus-pedidos', component: MeusPedidos },
   { path: 'suporte', component: Suporte },
   { path: 'loja', component: Loja },
 
-  // Login e Painel Administrativo
+  // Login
   { path: 'login', component: LoginComponent },
+
+  // 2. Início do Admin (Painel Administrativo)
+  { path: 'inicio-adm', component: HomeComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'admin', component: HomeComponent },
   { path: 'clientes', component: ClientesComponent },
   { path: 'financeiro', component: FinanceiroComponent },
   { path: 'inventario', component: InventarioComponent },
