@@ -1,0 +1,87 @@
+<div class="login-pagina">
+  <div class="login-card">
+    <!-- Lado esquerdo: Identidade visual -->
+    <section class="login-banner">
+      <span class="marca">oBoticário</span>
+      <h1>Beleza que transforma cada momento.</h1>
+      <p>
+        Acesse sua conta para acompanhar seus pedidos na loja ou gerenciar vendas,
+        clientes e inventário no painel administrativo.
+      </p>
+
+      <div class="rodape-banner">
+        <span>Beleza é se sentir bem</span>
+        <small>Sistema Integrado • Loja &amp; Gestão</small>
+      </div>
+    </section>
+
+    <!-- Lado direito: Formulário de acesso -->
+    <section class="login-form-area">
+      <h2>Bem-vindo(a)</h2>
+      <p class="sub">Escolha seu perfil de acesso para continuar.</p>
+
+      <!-- Seletor de perfil -->
+      <div class="seletor-perfil">
+        <button
+          type="button"
+          [class.ativo]="perfil === 'cliente'"
+          (click)="selecionarPerfil('cliente')"
+        >
+          Sou Cliente
+        </button>
+        <button
+          type="button"
+          [class.ativo]="perfil === 'admin'"
+          (click)="selecionarPerfil('admin')"
+        >
+          Sou Administrador
+        </button>
+      </div>
+
+      <div class="alerta-erro" *ngIf="erro">
+        {{ erro }}
+      </div>
+
+      <form (ngSubmit)="entrar()">
+        <div class="campo">
+          <label for="nome">Seu nome</label>
+          <input
+            id="nome"
+            type="text"
+            name="nome"
+            [(ngModel)]="nome"
+            [placeholder]="perfil === 'admin' ? 'Ex: Kevin (Admin)' : 'Como gostaria de ser chamado(a)?'"
+          />
+        </div>
+
+        <div class="campo">
+          <label for="email">E-mail</label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            [placeholder]="perfil === 'admin' ? 'admin@oboticario.com.br' : 'cliente@email.com'"
+            required
+          />
+        </div>
+
+        <div class="campo">
+          <label for="senha">Senha</label>
+          <input
+            id="senha"
+            type="password"
+            name="senha"
+            [(ngModel)]="senha"
+            placeholder="Digite sua senha"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn-entrar">
+          {{ perfil === 'admin' ? 'Entrar no Painel Administrativo' : 'Entrar na Loja' }}
+        </button>
+      </form>
+    </section>
+  </div>
+</div>

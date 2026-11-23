@@ -1,0 +1,143 @@
+<div class="layout-loja">
+  <app-menu-loja></app-menu-loja>
+
+  <main class="principal">
+    <div class="conteudo">
+      <header class="topo">
+        <input class="busca-topo" type="search" placeholder="Buscar produtos, marcas e muito mais...">
+        <div class="topo-direita">
+          <span class="usuario">Olá, {{ usuario }}</span>
+          <a routerLink="/loja" class="carrinho-topo">
+            Carrinho <span class="badge">{{ totalItens }}</span>
+          </a>
+        </div>
+      </header>
+
+      <section class="hero-carrinho">
+        <div>
+          <h2>Seu carrinho</h2>
+          <p>Confira seus produtos e finalize sua compra.</p>
+        </div>
+        <p class="frase">Pequenos cuidados fazem grandes dias.</p>
+      </section>
+
+      <div class="carrinho-grid">
+        <div class="coluna-esquerda">
+          <section class="cartao">
+            <div class="cartao-topo">
+              <h3>Produtos selecionados ({{ totalItens }})</h3>
+              <a routerLink="/produtos">Continuar comprando →</a>
+            </div>
+
+            <div *ngIf="itens.length === 0" style="padding: 30px 0; text-align: center; color: #537067;">
+              Seu carrinho está vazio. <a routerLink="/inicio" style="text-decoration: underline;">Ver produtos</a>
+            </div>
+
+            <div class="lista" *ngIf="itens.length > 0">
+              <div class="lista-cab">
+                <span>Produto</span>
+                <span>Preço</span>
+                <span>Quantidade</span>
+                <span>Subtotal</span>
+                <span></span>
+              </div>
+
+              <article class="item" *ngFor="let item of itens">
+                <div class="produto-info">
+                  <div class="foto"></div>
+                  <div>
+                    <h4>{{ item.produto.nome }}</h4>
+                    <small>{{ item.produto.subtitulo }}</small><br>
+                    <span class="tag">{{ item.produto.categoria }}</span>
+                  </div>
+                </div>
+                <span class="preco">{{ formatarMoeda(item.produto.preco) }}</span>
+                <div class="quantidade">
+                  <button type="button" (click)="alterarQtd(item.produto.id, -1)">−</button>
+                  <span>{{ item.quantidade }}</span>
+                  <button type="button" (click)="alterarQtd(item.produto.id, 1)">+</button>
+                </div>
+                <span class="preco">{{ formatarMoeda(item.produto.preco * item.quantidade) }}</span>
+                <button type="button" class="remover" (click)="remover(item.produto.id)">Remover</button>
+              </article>
+            </div>
+          </section>
+
+          <section class="cartao sugestoes">
+            <div class="cartao-topo">
+              <div>
+                <h3>Você pode gostar</h3>
+                <p class="sub">Produtos que combinam com o seu carrinho.</p>
+              </div>
+              <a routerLink="/produtos">Ver mais →</a>
+            </div>
+
+            <div class="sugestoes-grid">
+              <article class="sugestao" *ngFor="let sug of sugestoes">
+                <div class="sugestao-topo">
+                  <div class="foto"></div>
+                  <div>
+                    <h4>{{ sug.nome }}</h4>
+                    <small>{{ sug.subtitulo }}</small>
+                  </div>
+                </div>
+                <div class="sugestao-rodape">
+                  <span class="preco">{{ formatarMoeda(sug.preco) }}</span>
+                  <button type="button" class="btn-add" (click)="adicionarSugestao(sug)">+</button>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <section class="cartao resumo">
+          <h3>Resumo do pedido</h3>
+
+          <div class="resumo-linha">
+            <span>Subtotal ({{ totalItens }} itens)</span>
+            <b>{{ formatarMoeda(subtotal) }}</b>
+          </div>
+
+          <div class="resumo-linha">
+            <span>Frete</span>
+            <b>{{ subtotal >= 199 || subtotal === 0 ? 'Grátis' : 'R$ 15,00' }}</b>
+          </div>
+
+          <div class="resumo-linha" *ngIf="descontoCupom > 0" style="color: #115342;">
+            <span>Desconto (Cupom 10%)</span>
+            <b>- {{ formatarMoeda(descontoCupom) }}</b>
+          </div>
+
+          <form class="cupom" (ngSubmit)="aplicarCupom()">
+            <input type="text" [(ngModel)]="codigoCupom" name="cupom" placeholder="Cupom: BOTI10">
+            <button type="submit">Aplicar</button>
+          </form>
+
+          <div class="total">
+            <div class="resumo-linha">
+              <span>Total</span>
+              <strong>{{ formatarMoeda(totalFinal) }}</strong>
+            </div>
+            <p>ou em até 6x de {{ formatarMoeda(totalFinal / 6) }} sem juros</p>
+          </div>
+
+          <button type="button" class="btn-finalizar" (click)="finalizarCompra()">
+            Finalizar compra
+          </button>
+          <a routerLink="/inicio" class="btn-voltar">← Continuar comprando</a>
+
+          <div class="garantias">
+            <div class="garantia">
+              <span class="icone pequeno"></span>
+              <div><b>Frete seguro e rastreado</b><small>Acompanhe seu pedido em tempo real.</small></div>
+            </div>
+            <div class="garantia">
+              <span class="icone pequeno"></span>
+              <div><b>Compra segura</b><small>Seus dados protegidos sempre.</small></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>

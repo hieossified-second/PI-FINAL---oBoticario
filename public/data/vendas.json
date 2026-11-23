@@ -1,0 +1,92 @@
+[
+  {
+    "id": "ven-1",
+    "clienteId": "cli-1",
+    "clienteNome": "Mariana Silva",
+    "data": "2024-10-16",
+    "itens": [
+      {
+        "produtoId": "prod-1",
+        "nome": "Floratta Des. Colônia",
+        "preco": 189.90,
+        "quantidade": 1,
+        "subtotal": 189.90
+      }
+    ],
+    "descricaoProdutos": "Floratta + Hidratante",
+    "valorTotal": 189.90,
+    "status": "Concluída"
+  },
+  {
+    "id": "ven-2",
+    "clienteId": "cli-2",
+    "clienteNome": "João Santos",
+    "data": "2024-10-15",
+    "itens": [
+      {
+        "produtoId": "prod-2",
+        "nome": "Malbec Des. Colônia",
+        "preco": 159.90,
+        "quantidade": 1,
+        "subtotal": 159.90
+      }
+    ],
+    "descricaoProdutos": "Malbec",
+    "valorTotal": 159.90,
+    "status": "Concluída"
+  },
+  {
+    "id": "ven-3",
+    "clienteId": "cli-3",
+    "clienteNome": "Ana Costa",
+    "data": "2024-10-15",
+    "itens": [
+      {
+        "produtoId": "prod-3",
+        "nome": "Nativa SPA Ameixa",
+        "preco": 129.90,
+        "quantidade": 1,
+        "subtotal": 129.90
+      }
+    ],
+    "descricaoProdutos": "Nativa SPA Ameixa",
+    "valorTotal": 129.90,
+    "status": "Concluída"
+  },
+  {
+    "id": "ven-4",
+    "clienteId": "cli-4",
+    "clienteNome": "Lucas Oliveira",
+    "data": "2024-10-14",
+    "itens": [
+      {
+        "produtoId": "prod-4",
+        "nome": "Kit Presente Cuide-se Bem",
+        "preco": 99.90,
+        "quantidade": 1,
+        "subtotal": 99.90
+      }
+    ],
+    "descricaoProdutos": "Kit Presente Cuide-se Bem",
+    "valorTotal": 99.90,
+    "status": "Concluída"
+  },
+  {
+    "id": "ven-5",
+    "clienteId": "cli-5",
+    "clienteNome": "Fernanda Lima",
+    "data": "2024-10-14",
+    "itens": [
+      {
+        "produtoId": "prod-5",
+        "nome": "Egeo Dolce",
+        "preco": 139.90,
+        "quantidade": 1,
+        "subtotal": 139.90
+      }
+    ],
+    "descricaoProdutos": "Egeo Dolce",
+    "valorTotal": 139.90,
+    "status": "Concluída"
+  }
+]

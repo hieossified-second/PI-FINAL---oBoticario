@@ -1,0 +1,58 @@
+[
+  {
+    "id": "mov-1",
+    "data": "2024-10-16",
+    "descricao": "Venda de produtos",
+    "categoria": "Vendas",
+    "valor": 249.80,
+    "tipo": "Receita"
+  },
+  {
+    "id": "mov-2",
+    "data": "2024-10-15",
+    "descricao": "Compra de produtos",
+    "categoria": "Fornecedores",
+    "valor": 1250.00,
+    "tipo": "Despesa"
+  },
+  {
+    "id": "mov-3",
+    "data": "2024-10-14",
+    "descricao": "Energia elétrica",
+    "categoria": "Contas fixas",
+    "valor": 320.00,
+    "tipo": "Despesa"
+  },
+  {
+    "id": "mov-4",
+    "data": "2024-10-13",
+    "descricao": "Venda de produtos",
+    "categoria": "Vendas",
+    "valor": 189.90,
+    "tipo": "Receita"
+  },
+  {
+    "id": "mov-5",
+    "data": "2024-10-12",
+    "descricao": "Marketing Digital",
+    "categoria": "Marketing",
+    "valor": 150.00,
+    "tipo": "Despesa"
+  },
+  {
+    "id": "mov-6",
+    "data": "2024-10-11",
+    "descricao": "Venda de kits",
+    "categoria": "Vendas",
+    "valor": 399.60,
+    "tipo": "Receita"
+  },
+  {
+    "id": "mov-7",
+    "data": "2024-10-10",
+    "descricao": "Salários de equipe",
+    "categoria": "Salários",
+    "valor": 1200.00,
+    "tipo": "Despesa"
+  }
+]

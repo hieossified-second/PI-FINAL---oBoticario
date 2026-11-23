@@ -1,0 +1,177 @@
+<div class="app">
+    
+  <app-menu></app-menu>
+
+  <!-- ===== Conteúdo Principal ===== -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="search">
+        <input type="search" placeholder="Buscar no sistema..." [(ngModel)]="termoBusca" (input)="filtrarProdutos()">
+      </div>
+      <div class="user" (click)="abrirModalUsuario()" style="cursor: pointer;" title="Gerenciar Usuários & Banco JSON">
+        <span class="avatar">{{ usuarioAtual.avatar || 'A' }}</span>
+        <span>Olá, {{ usuarioAtual.nome || 'Administrador' }} ⚙️</span>
+      </div>
+    </header>
+
+    <!-- Cabeçalho da Página -->
+    <div class="page-header">
+      <div>
+        <h1>Inventário</h1>
+        <p>Gerencie os produtos e o estoque dinâmico da sua loja.</p>
+      </div>
+      <button class="btn-adicionar" type="button" (click)="abrirModalNovo()">+ Adicionar produto</button>
+    </div>
+
+    <!-- Cards de Estatísticas do Estoque -->
+    <section class="stats">
+      <div class="stat">
+        <div class="stat-icon">📦</div>
+        <strong>{{ stats.totalEstoque }}</strong>
+        <span class="stat-label">Produtos em estoque</span>
+      </div>
+      <div class="stat">
+        <div class="stat-icon alerta">⚠️</div>
+        <strong>{{ stats.baixoEstoque }}</strong>
+        <span class="stat-label">Produtos com estoque baixo</span>
+      </div>
+      <div class="stat">
+        <div class="stat-icon perigo">❌</div>
+        <strong>{{ stats.semEstoque }}</strong>
+        <span class="stat-label">Produtos sem estoque</span>
+      </div>
+    </section>
+
+    <!-- Painel da Tabela e Filtros -->
+    <section class="panel">
+      
+      <div class="filters">
+        <div class="search-table">
+          <input type="search" placeholder="Buscar por nome, categoria..." [(ngModel)]="termoBusca" (input)="filtrarProdutos()">
+        </div>
+        <div class="select">
+          <select [(ngModel)]="categoriaSelecionada" (change)="filtrarProdutos()">
+            <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tabela de Produtos -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Categoria</th>
+              <th>Estoque</th>
+              <th>Valor</th>
+              <th class="col-acoes">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let produto of produtosFiltrados">
+              <td>
+                <div class="product-info">
+                  <span class="thumb" [style.background-color]="produto.cor || '#E9A9A5'"></span>
+                  {{ produto.nome }}
+                </div>
+              </td>
+              <td>{{ produto.categoria }}</td>
+              <td>
+                <span 
+                  [class.badge-alerta]="produto.estoque > 0 && produto.estoque <= (produto.estoqueMinimo || 10)"
+                  [class.badge-perigo]="produto.estoque <= 0">
+                  {{ produto.estoque }}
+                </span>
+              </td>
+              <td>{{ formatarMoeda(produto.valor) }}</td>
+              <td class="col-acoes">
+                <button class="btn-acao" type="button" title="Editar" (click)="abrirModalEditar(produto)">✏️</button>
+                <button class="btn-acao danger" type="button" title="Excluir" (click)="excluirProduto(produto.id)">🗑️</button>
+              </td>
+            </tr>
+
+            <tr *ngIf="produtosFiltrados.length === 0">
+              <td colspan="5" style="text-align: center; color: #888; padding: 24px;">
+                Nenhum produto encontrado com os filtros aplicados.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+  </div>
+</div>
+
+<!-- Modal Dinâmico de Produto -->
+<div class="modal-backdrop" *ngIf="modalAberto" (click)="fecharModal()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <header class="modal-box-header">
+      <h3>{{ modoEdicao ? 'Editar Produto' : 'Cadastrar Novo Produto' }}</h3>
+      <button type="button" class="btn-close" (click)="fecharModal()">&times;</button>
+    </header>
+
+    <form (ngSubmit)="salvarProduto()" class="form-produto-modal">
+      <div class="campo-grupo">
+        <label>Nome do Produto *</label>
+        <input type="text" [(ngModel)]="produtoForm.nome" name="nome" placeholder="Ex: Elysee Eau de Parfum" required>
+      </div>
+
+      <div class="grid-2">
+        <div class="campo-grupo">
+          <label>Categoria *</label>
+          <select [(ngModel)]="produtoForm.categoria" name="categoria">
+            <option value="Perfumaria">Perfumaria</option>
+            <option value="Cuidados Pessoais">Cuidados Pessoais</option>
+            <option value="Cabelos">Cabelos</option>
+            <option value="Kits">Kits</option>
+            <option value="Maquiagem">Maquiagem</option>
+          </select>
+        </div>
+
+        <div class="campo-grupo">
+          <label>Valor Unitário (R$) *</label>
+          <input type="number" step="0.01" min="0" [(ngModel)]="produtoForm.valor" name="valor" required>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="campo-grupo">
+          <label>Quantidade em Estoque *</label>
+          <input type="number" min="0" [(ngModel)]="produtoForm.estoque" name="estoque" required>
+        </div>
+
+        <div class="campo-grupo">
+          <label>Estoque Mínimo (Alerta)</label>
+          <input type="number" min="1" [(ngModel)]="produtoForm.estoqueMinimo" name="estoqueMinimo">
+        </div>
+      </div>
+
+      <div class="campo-grupo">
+        <label>Cor / Destaque Visual</label>
+        <div class="seletor-cores">
+          <span 
+            *ngFor="let c of coresDisponiveis" 
+            class="circulo-cor" 
+            [style.background-color]="c.hex" 
+            [class.selecionado]="produtoForm.cor === c.hex"
+            (click)="produtoForm.cor = c.hex"
+            [title]="c.nome">
+          </span>
+        </div>
+      </div>
+
+      <div class="modal-acoes">
+        <button type="button" class="btn-cancel" (click)="fecharModal()">Cancelar</button>
+        <button type="submit" class="btn-confirm">{{ modoEdicao ? 'Salvar Alterações' : 'Salvar Produto' }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de Usuários do Sistema -->
+<app-usuario-modal *ngIf="modalUsuarioAberto" (fechar)="fecharModalUsuario()"></app-usuario-modal>

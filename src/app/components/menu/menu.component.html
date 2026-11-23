@@ -1,0 +1,16 @@
+<aside class="menu">
+    <h2>{{ usuarioAtual.nomeLoja || 'oBOTICÁRIO' }}</h2>
+
+    <nav>
+        <a routerLink="/" routerLinkActive="ativo" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        <a routerLink="/clientes" routerLinkActive="ativo">Clientes</a>
+        <a routerLink="/vendas" routerLinkActive="ativo">Vendas</a>
+        <a routerLink="/financeiro" routerLinkActive="ativo">Financeiro</a>
+        <a routerLink="/inventario" routerLinkActive="ativo">Inventário</a>
+    </nav>
+
+    <div class="frase">
+        <p>{{ usuarioAtual.fraseBanner || 'Beleza é se sentir bem.' }}</p>
+        <small>{{ usuarioAtual.nomeLoja || 'O BOTICÁRIO' }}</small>
+    </div>
+</aside>

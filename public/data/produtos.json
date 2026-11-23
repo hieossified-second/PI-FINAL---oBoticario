@@ -1,0 +1,74 @@
+[
+  {
+    "id": "prod-1",
+    "nome": "Floratta Des. Colônia",
+    "categoria": "Perfumaria",
+    "estoque": 35,
+    "estoqueMinimo": 10,
+    "valor": 189.90,
+    "cor": "#E9A9A5"
+  },
+  {
+    "id": "prod-2",
+    "nome": "Malbec Des. Colônia",
+    "categoria": "Perfumaria",
+    "estoque": 28,
+    "estoqueMinimo": 10,
+    "valor": 159.90,
+    "cor": "#1A1A1A"
+  },
+  {
+    "id": "prod-3",
+    "nome": "Nativa SPA Ameixa",
+    "categoria": "Cuidados Pessoais",
+    "estoque": 12,
+    "estoqueMinimo": 15,
+    "valor": 129.90,
+    "cor": "#8E2F3E"
+  },
+  {
+    "id": "prod-4",
+    "nome": "Kit Presente Cuide-se Bem",
+    "categoria": "Kits",
+    "estoque": 18,
+    "estoqueMinimo": 8,
+    "valor": 99.90,
+    "cor": "#F0B5B0"
+  },
+  {
+    "id": "prod-5",
+    "nome": "Egeo Dolce",
+    "categoria": "Perfumaria",
+    "estoque": 22,
+    "estoqueMinimo": 10,
+    "valor": 139.90,
+    "cor": "#D9344A"
+  },
+  {
+    "id": "prod-6",
+    "nome": "Shampoo Nativa SPA",
+    "categoria": "Cabelos",
+    "estoque": 40,
+    "estoqueMinimo": 12,
+    "valor": 69.90,
+    "cor": "#242424"
+  },
+  {
+    "id": "prod-7",
+    "nome": "Hidratante Corporal Cuide-se Bem",
+    "categoria": "Cuidados Pessoais",
+    "estoque": 5,
+    "estoqueMinimo": 10,
+    "valor": 59.90,
+    "cor": "#558B2F"
+  },
+  {
+    "id": "prod-8",
+    "nome": "Batom Make B. Velvet",
+    "categoria": "Maquiagem",
+    "estoque": 0,
+    "estoqueMinimo": 5,
+    "valor": 49.90,
+    "cor": "#C2185B"
+  }
+]

@@ -1,0 +1,610 @@
+:host {
+  display: block;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.layout-loja {
+  display: flex;
+  min-height: 100vh;
+  background: #edf1ed;
+  color: #103d33;
+  font-family: "DM Sans", Arial, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+h1,
+h2,
+h3 {
+  color: #103d33;
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+/* =========================================================
+   Área principal e topo
+   ========================================================= */
+.principal {
+  flex: 1;
+  min-width: 0;
+  margin-left: 0; /* Remove o deslocamento extra que criava a faixa cinza à esquerda */
+  width: 100%;
+}
+
+.conteudo {
+  min-height: 100vh;
+  padding: 22px 24px 40px 24px; /* Preenchimento uniforme nas laterais */
+  background: #ffffff;
+  width: 100%;
+}
+
+.topo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.busca-topo {
+  flex: 1;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid #d8e0da;
+  border-radius: 8px;
+  outline: 0;
+  color: #103d33;
+  background: #fafbf9;
+  font-size: 13px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.busca-topo:focus {
+  border-color: #115342;
+  box-shadow: 0 0 0 3px rgba(17, 83, 66, 0.12);
+}
+
+.topo-direita {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: auto;
+  color: #022d25;
+  font-size: 13px;
+}
+
+.usuario {
+  font-weight: 700;
+}
+
+.carrinho-topo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 99px;
+  background: #eef2ec;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.carrinho-topo:hover {
+  background: #dce6dc;
+}
+
+.carrinho-topo .badge {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 50%;
+  color: #ffffff;
+  background: #022d25;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   Banner e métricas
+   ========================================================= */
+.hero-pedidos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 28px 36px;
+  border-radius: 12px;
+  color: #ffffff;
+  background: linear-gradient(120deg, #0d3b2f, #2b6b53);
+}
+
+.hero-tag {
+  display: inline-block;
+  margin-bottom: 6px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.hero-pedidos h2 {
+  margin-bottom: 6px;
+  color: #ffffff;
+  font-size: 32px;
+}
+
+.hero-pedidos p {
+  color: #e6efe8;
+  font-size: 14px;
+}
+
+.hero-metricas {
+  display: flex;
+  gap: 12px;
+}
+
+.metrica {
+  min-width: 96px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.metrica strong {
+  display: block;
+  font: 700 22px Georgia, serif;
+}
+
+.metrica span {
+  font-size: 11px;
+  color: #e6efe8;
+}
+
+/* =========================================================
+   Barra de filtros
+   ========================================================= */
+.barra-filtros {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 22px 0 20px;
+}
+
+.filtros {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filtro {
+  padding: 8px 16px;
+  border: 1px solid #d8e0da;
+  border-radius: 99px;
+  color: #537067;
+  background: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filtro:hover {
+  border-color: #115342;
+  color: #103d33;
+  background: #f3f7f4;
+}
+
+.filtro.ativo {
+  border-color: #022d25;
+  color: #ffffff;
+  background: #022d25;
+}
+
+.busca-filtro input {
+  width: 260px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #d8e0da;
+  border-radius: 8px;
+  outline: 0;
+  background: #fafbf9;
+  font-size: 12px;
+}
+
+.busca-filtro input:focus {
+  border-color: #115342;
+  box-shadow: 0 0 0 3px rgba(17, 83, 66, 0.12);
+}
+
+/* =========================================================
+   Estado vazio
+   ========================================================= */
+.estado-vazio {
+  padding: 48px 20px;
+  border: 1px dashed #c7d4cb;
+  border-radius: 12px;
+  background: #fafbf9;
+  text-align: center;
+}
+
+.vazio-icone {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.estado-vazio h3 {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.estado-vazio p {
+  max-width: 380px;
+  margin: 0 auto 18px;
+  color: #537067;
+  font-size: 13px;
+}
+
+/* =========================================================
+   Lista e cards de pedidos
+   ========================================================= */
+.pedidos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.pedido {
+  padding: 22px 24px;
+  border: 1px solid #d8e0da;
+  border-radius: 12px;
+  background: #fcfdfb;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pedido:hover {
+  border-color: #b7c8bd;
+  box-shadow: 0 6px 18px rgba(16, 61, 51, 0.06);
+}
+
+.pedido-cab {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e4ebe6;
+}
+
+.numero-linha {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.pedido-cab h3 {
+  font-size: 19px;
+}
+
+.pedido-cab small {
+  color: #537067;
+  font-size: 12px;
+}
+
+.status {
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.status.andamento {
+  color: #115342;
+  background: #e3eee5;
+}
+
+.status.entregue {
+  color: #022d25;
+  background: #cde2d1;
+}
+
+.status.cancelado {
+  color: #842b25;
+  background: #f8e3e1;
+}
+
+.total-topo {
+  text-align: right;
+}
+
+.total-topo small {
+  display: block;
+  color: #537067;
+  font-size: 11px;
+}
+
+.total-topo strong {
+  color: #022d25;
+  font: 700 22px Georgia, serif;
+}
+
+/* =========================================================
+   Linha do tempo (Stepper conectado)
+   ========================================================= */
+.stepper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 20px 0;
+  padding: 14px 10px;
+  border-radius: 10px;
+  background: #f4f7f4;
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: #d8e0da;
+  z-index: 0;
+}
+
+.step.concluido:not(:last-child)::after {
+  background: #115342;
+}
+
+.step-bolinha {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #cbd6ce;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #537067;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.step.concluido .step-bolinha {
+  border-color: #115342;
+  background: #115342;
+  color: #ffffff;
+}
+
+.step.atual .step-bolinha {
+  border-color: #022d25;
+  background: #e3eee5;
+  color: #022d25;
+  box-shadow: 0 0 0 4px rgba(17, 83, 66, 0.15);
+}
+
+.step-label {
+  font-size: 11px;
+  color: #537067;
+  font-weight: 500;
+}
+
+.step.concluido .step-label,
+.step.atual .step-label {
+  color: #103d33;
+  font-weight: 700;
+}
+
+.aviso-cancelado {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #fdf2f1;
+  color: #842b25;
+  font-size: 12px;
+}
+
+/* =========================================================
+   Produtos e botões de ação
+   ========================================================= */
+.pedido-corpo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding-top: 4px;
+}
+
+.produtos-pedido {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.item-pedido {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid #e0e7e2;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.foto {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  background: #eef4ef;
+  font-size: 18px;
+}
+
+.item-pedido b {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.item-pedido small {
+  color: #537067;
+  font-size: 11px;
+}
+
+.pedido-acoes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.btn-verde,
+.btn-claro {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-verde {
+  border: 0;
+  color: #ffffff;
+  background: #022d25;
+}
+
+.btn-verde:hover {
+  background: #115342;
+}
+
+.btn-claro {
+  border: 1px solid #d8e0da;
+  color: #103d33;
+  background: #ffffff;
+}
+
+.btn-claro:hover {
+  border-color: #115342;
+  background: #f2f6f3;
+}
+
+/* =========================================================
+   Responsividade
+   ========================================================= */
+@media (max-width: 1100px) {
+  .hero-pedidos {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pedido-corpo {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .usuario {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .layout-loja {
+    flex-direction: column;
+  }
+
+  .principal {
+    margin-left: 0;
+  }
+
+  .conteudo {
+    padding: 16px;
+  }
+
+  .hero-pedidos {
+    padding: 22px;
+  }
+
+  .hero-metricas {
+    width: 100%;
+  }
+
+  .metrica {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 8px;
+  }
+
+  .busca-filtro,
+  .busca-filtro input {
+    width: 100%;
+  }
+
+  .stepper {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 8px;
+  }
+
+  .step:not(:last-child)::after {
+    display: none;
+  }
+}
+
+@media (max-width: 430px) {
+  .hero-pedidos h2 {
+    font-size: 26px;
+  }
+
+  .pedido-cab {
+    flex-direction: column;
+  }
+
+  .total-topo {
+    text-align: left;
+  }
+
+  .pedido-acoes {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .btn-verde,
+  .btn-claro {
+    width: 100%;
+  }
+}

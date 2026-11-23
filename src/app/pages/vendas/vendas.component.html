@@ -1,0 +1,168 @@
+<app-menu></app-menu>
+
+<main class="conteudo">
+
+    <header class="topo">
+        <input type="text" placeholder="Buscar no sistema..." [(ngModel)]="termoBusca" (input)="filtrarVendas()">
+        <div class="usuario" (click)="abrirModalUsuario()" style="cursor: pointer;" title="Gerenciar Usuários & Banco JSON">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #2b6b53; color: white; font-weight: bold; font-size: 11px; margin-right: 6px;">{{ usuarioAtual.avatar || 'A' }}</span>
+            Olá, {{ usuarioAtual.nome || 'Administrador' }} ⚙️
+        </div>
+    </header>
+
+    <section class="boas-vindas">
+        <h1>Vendas</h1>
+        <p>Registre novas vendas dinâmicas e acompanhe o histórico integrado ao estoque.</p>
+    </section>
+
+    <section class="resumos">
+
+        <div class="cartao">
+            <h3>Vendas no mês</h3>
+            <strong>{{ totalVendas }}</strong>
+            <p>Total de vendas realizadas</p>
+            <small>+ {{ usuarioAtual.percentualCrescimentoVendas || 8 }}%</small>
+        </div>
+
+        <div class="cartao">
+            <h3>Faturamento</h3>
+            <strong>{{ formatarMoeda(faturamentoTotal) }}</strong>
+            <p>Faturamento acumulado</p>
+            <small>+ {{ usuarioAtual.percentualCrescimentoFaturamento || 15 }}%</small>
+        </div>
+
+        <div class="cartao">
+            <h3>Ticket médio</h3>
+            <strong>{{ formatarMoeda(ticketMedio) }}</strong>
+            <p>Valor médio por venda</p>
+            <small>+ {{ usuarioAtual.percentualCrescimentoTicket || 6 }}%</small>
+        </div>
+
+    </section>
+
+    <section class="parte-inferior">
+
+        <div class="vendas">
+
+            <h3>Registrar venda</h3>
+
+            <form class="form-venda" (ngSubmit)="adicionarAoCarrinho()">
+
+                <label for="cliente">Cliente *</label>
+                <select id="cliente" [(ngModel)]="clienteSelecionadoId" name="cliente" required>
+                    <option value="" disabled>Selecione um cliente</option>
+                    <option *ngFor="let c of clientes" [value]="c.id">
+                        {{ c.nome }} ({{ c.tipo }})
+                    </option>
+                </select>
+
+                <label for="produto">Produto *</label>
+                <select id="produto" [(ngModel)]="produtoSelecionadoId" name="produto" required>
+                    <option value="" disabled selected>Selecione um produto</option>
+                    <option *ngFor="let p of produtos" [value]="p.id" [disabled]="p.estoque <= 0">
+                        {{ p.nome }} - {{ formatarMoeda(p.valor) }} {{ p.estoque <= 0 ? '(Sem estoque)' : '(Estoque: ' + p.estoque + ')' }}
+                    </option>
+                </select>
+
+                <label for="quantidade">Quantidade *</label>
+                <input type="number" id="quantidade" min="1" [max]="obterEstoqueDisponivel() || 999" [(ngModel)]="quantidade" name="quantidade" required>
+                <small *ngIf="produtoSelecionadoId" style="font-size: 11px; color: #1F5C46; margin-top: -6px; margin-bottom: 8px; display: block;">
+                    Disponível para venda: <strong>{{ obterEstoqueDisponivel() }}</strong> unidades
+                </small>
+
+                <button type="submit">
+                    Adicionar ao carrinho
+                </button>
+
+            </form>
+
+            <h3 class="titulo-carrinho">Carrinho</h3>
+
+            <div id="carrinho">
+                <p class="vazio" *ngIf="carrinho.length === 0">Nenhum produto adicionado ao carrinho.</p>
+
+                <div class="item-carrinho" *ngFor="let item of carrinho; let i = index">
+                    <span>{{ item.quantidade }}x {{ item.nome }}</span>
+                    <strong>{{ formatarMoeda(item.subtotal) }}</strong>
+                    <button type="button" (click)="removerDoCarrinho(i)" title="Remover item">✕</button>
+                </div>
+            </div>
+
+            <div class="total">
+                <span>Total:</span>
+                <strong id="total">{{ formatarMoeda(totalCarrinho) }}</strong>
+            </div>
+
+            <button class="finalizar" type="button" (click)="finalizarVenda()" [disabled]="carrinho.length === 0" [style.opacity]="carrinho.length === 0 ? '0.5' : '1'">
+                Finalizar venda
+            </button>
+
+        </div>
+
+        <div class="coluna-lateral">
+
+            <div class="acoes">
+                <h3>Ações rápidas</h3>
+
+                <div class="botoes">
+                    <button type="button" (click)="limparCarrinho()">
+                        Limpar carrinho
+                    </button>
+
+                    <button type="button" (click)="imprimir()">
+                        Imprimir página
+                    </button>
+                </div>
+            </div>
+
+            <div class="mensagem">
+                <h3>{{ usuarioAtual.fraseBanner || 'Juntos por um mundo mais bonito' }}</h3>
+                <p>{{ usuarioAtual.subtituloBanner || 'O Boticário e você, por um futuro mais sustentável.' }}</p>
+                <button type="button" (click)="abrirModalUsuario()">Gerenciar Usuários & Banco</button>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="vendas historico">
+
+        <div class="titulo-tabela">
+            <h3>Últimas vendas</h3>
+            <span style="font-size: 13px; color: #6E7B74;">{{ vendas.length }} vendas registradas no banco</span>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Data</th>
+                    <th>Produto(s)</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let v of vendasFiltradas">
+                    <td>{{ v.clienteNome }}</td>
+                    <td>{{ v.data }}</td>
+                    <td>{{ v.descricaoProdutos }}</td>
+                    <td>{{ formatarMoeda(v.valorTotal) }}</td>
+                    <td><span class="status">{{ v.status }}</span></td>
+                </tr>
+
+                <tr *ngIf="vendasFiltradas.length === 0">
+                    <td colspan="5" style="text-align: center; color: #888; padding: 24px;">
+                        Nenhuma venda registrada até o momento.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </section>
+
+</main>
+
+<!-- Modal de Usuários do Sistema -->
+<app-usuario-modal *ngIf="modalUsuarioAberto" (fechar)="fecharModalUsuario()"></app-usuario-modal>

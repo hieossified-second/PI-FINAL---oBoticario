@@ -1,0 +1,74 @@
+[
+  {
+    "id": "cli-1",
+    "nome": "Mariana Silva",
+    "cpf": "123.456.789-01",
+    "telefone": "(11) 98765-4321",
+    "email": "mariana.silva@email.com",
+    "tipo": "Pessoa física",
+    "dataCadastro": "2024-10-16"
+  },
+  {
+    "id": "cli-2",
+    "nome": "João Santos",
+    "cpf": "987.654.321-00",
+    "telefone": "(11) 91234-5678",
+    "email": "joao.santos@email.com",
+    "tipo": "Pessoa física",
+    "dataCadastro": "2024-09-12"
+  },
+  {
+    "id": "cli-3",
+    "nome": "Ana Costa",
+    "cpf": "456.123.789-00",
+    "telefone": "(11) 99876-5432",
+    "email": "ana.costa@email.com",
+    "tipo": "Pessoa física",
+    "dataCadastro": "2024-08-05"
+  },
+  {
+    "id": "cli-4",
+    "nome": "Lucas Oliveira",
+    "cpf": "321.654.987-00",
+    "telefone": "(11) 93456-7890",
+    "email": "lucas.oliveira@email.com",
+    "tipo": "Pessoa física",
+    "dataCadastro": "2024-07-21"
+  },
+  {
+    "id": "cli-5",
+    "nome": "Fernanda Lima",
+    "cpf": "789.456.123-00",
+    "telefone": "(11) 97654-3210",
+    "email": "fernanda.lima@email.com",
+    "tipo": "Pessoa física",
+    "dataCadastro": "2024-06-18"
+  },
+  {
+    "id": "cli-6",
+    "nome": "Carlos Almeida",
+    "cpf": "654.987.321-00",
+    "telefone": "(11) 95543-2109",
+    "email": "carlos.almeida@email.com",
+    "tipo": "Pessoa física",
+    "dataCadastro": "2024-05-30"
+  },
+  {
+    "id": "cli-7",
+    "nome": "Beatriz Souza",
+    "cpf": "258.741.963-00",
+    "telefone": "(11) 98231-5467",
+    "email": "contato@souzacosmeticos.com.br",
+    "tipo": "Pessoa jurídica",
+    "dataCadastro": "2024-04-14"
+  },
+  {
+    "id": "cli-8",
+    "nome": "Rafael Pereira",
+    "cpf": "963.852.741-00",
+    "telefone": "(11) 97021-3345",
+    "email": "rafael.pereira@email.com",
+    "tipo": "Pessoa física",
+    "dataCadastro": "2024-03-22"
+  }
+]

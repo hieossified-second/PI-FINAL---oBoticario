@@ -1,0 +1,22 @@
+<aside>
+  <h1>oBoticário</h1>
+  <nav>
+    <ul>
+      <li><a routerLink="/inicio" routerLinkActive="ativo">Início</a></li>
+      <li><a routerLink="/produtos" routerLinkActive="ativo">Produtos</a></li>
+      <li><a routerLink="/meus-pedidos" routerLinkActive="ativo">Meus pedidos</a></li>
+      <li><a routerLink="/suporte" routerLinkActive="ativo">Suporte</a></li>
+      <li>
+        <a routerLink="/loja" routerLinkActive="ativo">
+          Carrinho <span class="badge">{{ totalItens }}</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/login" routerLinkActive="ativo" class="btn-login-menu">
+          Entrar / Login
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <p class="slogan">Beleza é<br>se sentir bem.<small>OBOTICÁRIO</small></p>
+</aside>

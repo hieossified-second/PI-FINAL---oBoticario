@@ -1,0 +1,392 @@
+/* =========================================================
+   Base e Tipografia
+   ========================================================= */
+.layout-loja {
+  display: flex;
+  min-height: 100vh;
+  background-color: #F8F6F1;
+  color: #1d2b27;
+  font-family: "DM Sans", Arial, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+h2,
+h3 {
+  font-family: "Playfair Display", Georgia, serif;
+  color: #12352d;
+}
+
+/* =========================================================
+   Área Principal e Topo
+   ========================================================= */
+.principal {
+  flex: 1;
+  min-width: 0;
+}
+
+.conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 20px 24px;
+}
+
+.topo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.busca-topo {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-family: "DM Sans", Arial, sans-serif;
+  background-color: #ffffff;
+  border: 1px solid #d5d9d7;
+  border-radius: 8px;
+  outline: none;
+}
+
+.topo-direita {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 500;
+  color: #12352d;
+}
+
+.carrinho-topo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 99px;
+  background: #eef2ec;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.carrinho-topo:hover {
+  background: #dce6dc;
+}
+
+.carrinho-topo .badge {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 50%;
+  color: #ffffff;
+  background: #022d25;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background-color: #12352d;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   Elementos Reutilizáveis e Botões
+   ========================================================= */
+.foto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 2px dashed currentColor;
+  border-radius: 10px;
+  font-size: 13px;
+  text-align: center;
+  opacity: 0.5;
+}
+
+.icone {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #d6e4d9;
+}
+
+.btn-contorno {
+  display: inline-block;
+  padding: 11px 20px;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn-contorno:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.btn-verde {
+  padding: 9px;
+  border: 0;
+  border-radius: 5px;
+  background-color: #1F5B46;
+  color: #ffffff;
+  font-size: 12px;
+  font-family: "DM Sans", Arial, sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-verde:hover {
+  background-color: #184E37;
+}
+
+/* =========================================================
+   Banner Principal (Hero)
+   ========================================================= */
+.hero {
+  display: grid;
+  grid-template-columns: 1.1fr 1.2fr 0.7fr;
+  align-items: center;
+  gap: 24px;
+  min-height: 290px;
+  padding: 36px 40px;
+  border-radius: 12px;
+  background: linear-gradient(120deg, #12352d, #3d6b4f);
+  color: #ffffff;
+}
+
+.hero h2 {
+  color: #ffffff;
+  font-size: 40px;
+  line-height: 1.1;
+  margin-bottom: 14px;
+}
+
+.hero p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.hero .foto {
+  min-height: 200px;
+}
+
+.beneficios {
+  display: grid;
+  gap: 18px;
+  font-size: 14px;
+}
+
+/* =========================================================
+   Categorias e Grade de Produtos
+   ========================================================= */
+.categorias {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.categorias a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  color: #12352d;
+}
+
+.secao-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 14px;
+}
+
+.secao-topo h3 {
+  font-size: 26px;
+}
+
+.sub {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #6b7a75;
+}
+
+.secao-topo a {
+  font-size: 13px;
+  color: #12352d;
+}
+
+.produtos {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+
+.produto {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  background-color: #ffffff;
+  border: 1px solid #e3e0d6;
+  border-radius: 8px;
+}
+
+.selo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background-color: #1F5B46;
+  color: #ffffff;
+  font-size: 11px;
+}
+
+.produto .foto {
+  height: 110px;
+  color: #6b7a75;
+}
+
+.produto h4 {
+  margin-top: 6px;
+  font-size: 13px;
+  font-family: "Playfair Display", Georgia, serif;
+  color: #12352d;
+}
+
+.produto small {
+  font-size: 12px;
+  color: #6b7a75;
+}
+
+.estrelas {
+  font-size: 12px;
+  color: #8a7a30;
+}
+
+.preco {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.produto .btn-verde {
+  margin-top: auto;
+}
+
+/* =========================================================
+   Banners Promocionais
+   ========================================================= */
+.promos {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 14px;
+}
+
+.promo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 140px;
+  padding: 24px 28px;
+  border-radius: 12px;
+  background-color: #12352d;
+  color: #ffffff;
+}
+
+.promo h3 {
+  color: #ffffff;
+  font-size: 24px;
+}
+
+.promo p {
+  font-size: 14px;
+}
+
+.promo.claro {
+  background-color: #dfe8dc;
+  color: #12352d;
+}
+
+.promo.claro h3 {
+  color: #12352d;
+}
+
+/* =========================================================
+   Responsividade
+   ========================================================= */
+@media (max-width: 1100px) {
+  .produtos,
+  .categorias {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .hero {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .beneficios {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .promos {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .layout-loja {
+    flex-direction: column;
+  }
+
+  .conteudo {
+    padding: 15px;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 24px;
+  }
+
+  .hero .foto {
+    display: none;
+  }
+
+  .produtos,
+  .categorias {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .topo-direita .usuario {
+    display: none;
+  }
+}

@@ -1,0 +1,279 @@
+<div class="modal-overlay" (click)="fechar.emit()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    
+    <header class="modal-header">
+      <div class="header-info">
+        <h2>Gerenciador de Usuários & Banco JSON</h2>
+        <p>Consulte, cadastre, edite e gerencie os usuários e dados do sistema</p>
+      </div>
+      <button class="btn-fechar" (click)="fechar.emit()" type="button" aria-label="Fechar">&times;</button>
+    </header>
+
+    <!-- Notificações -->
+    <div *ngIf="mensagemSucesso" class="alerta sucesso">
+      ✅ {{ mensagemSucesso }}
+    </div>
+    <div *ngIf="mensagemErro" class="alerta erro">
+      ⚠️ {{ mensagemErro }}
+    </div>
+
+    <!-- Navegação de Abas -->
+    <nav class="abas">
+      <button [class.ativo]="abaAtiva === 'gerenciar'" (click)="abaAtiva = 'gerenciar'" type="button">
+        👥 Usuários Cadastrados ({{ usuarios.length }})
+      </button>
+      <button [class.ativo]="abaAtiva === 'novo'" (click)="prepararNovo()" type="button">
+        {{ modoEdicao ? '✏️ Editar Usuário' : '+ Novo Usuário' }}
+      </button>
+      <button [class.ativo]="abaAtiva === 'backup'" (click)="abaAtiva = 'backup'" type="button">
+        💾 Banco de Dados JSON
+      </button>
+    </nav>
+
+    <!-- ABA 1: GERENCIAR USUÁRIOS -->
+    <div class="aba-conteudo" *ngIf="abaAtiva === 'gerenciar'">
+      <div class="usuario-atual-card" *ngIf="usuarioAtual">
+        <span class="tag-ativo">Sessão Ativa</span>
+        <div class="user-row">
+          <div class="avatar-grande">{{ usuarioAtual.avatar }}</div>
+          <div class="detalhes">
+            <h3>{{ usuarioAtual.nome }}</h3>
+            <p>{{ usuarioAtual.cargo }} &bull; {{ usuarioAtual.email }}</p>
+            <small>Telefone: {{ usuarioAtual.telefone || 'Não informado' }}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="lista-usuarios">
+        <h3>Todos os Usuários no Banco de Dados</h3>
+        <div class="tabela-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Avatar</th>
+                <th>Nome</th>
+                <th>Cargo / Função</th>
+                <th>E-mail</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let u of usuarios">
+                <td>
+                  <span class="avatar-mini">{{ u.avatar }}</span>
+                </td>
+                <td>
+                  <strong>{{ u.nome }}</strong>
+                  <span *ngIf="u.id === usuarioAtual.id" class="badge-voce">Você</span>
+                </td>
+                <td>{{ u.cargo }}</td>
+                <td>{{ u.email }}</td>
+                <td>
+                  <span class="badge-status" [class.ativo]="u.status === 'Ativo'">
+                    {{ u.status }}
+                  </span>
+                </td>
+                <td class="col-acoes">
+                  <button 
+                    *ngIf="u.id !== usuarioAtual.id" 
+                    (click)="selecionarUsuario(u.id)" 
+                    class="btn-acao primario" 
+                    type="button" 
+                    title="Alternar para este usuário">
+                    Ativar
+                  </button>
+                  <button (click)="editar(u)" class="btn-acao" type="button" title="Editar">
+                    ✏️
+                  </button>
+                  <button 
+                    (click)="excluirUsuario(u.id)" 
+                    [disabled]="usuarios.length <= 1"
+                    class="btn-acao danger" 
+                    type="button" 
+                    title="Excluir">
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABA 2: NOVO / EDITAR USUÁRIO -->
+    <div class="aba-conteudo" *ngIf="abaAtiva === 'novo'">
+      <form (ngSubmit)="salvarUsuario()" class="form-usuario">
+        <h3>{{ modoEdicao ? 'Editar Usuário: ' + formUsuario.nome : 'Cadastrar Novo Usuário' }}</h3>
+        
+        <div class="grid-campos">
+          <div class="campo">
+            <label for="usr-nome">Nome Completo *</label>
+            <input 
+              id="usr-nome" 
+              type="text" 
+              [(ngModel)]="formUsuario.nome" 
+              name="nome" 
+              placeholder="Ex: Beatriz Lima" 
+              required>
+          </div>
+
+          <div class="campo">
+            <label for="usr-email">E-mail *</label>
+            <input 
+              id="usr-email" 
+              type="email" 
+              [(ngModel)]="formUsuario.email" 
+              name="email" 
+              placeholder="usuario@boticario.com.br" 
+              required>
+          </div>
+
+          <div class="campo">
+            <label for="usr-cargo">Cargo / Função *</label>
+            <select id="usr-cargo" [(ngModel)]="formUsuario.cargo" name="cargo">
+              <option value="Administrador">Administrador</option>
+              <option value="Gerente Geral">Gerente Geral</option>
+              <option value="Revendedora Diamante">Revendedora Diamante</option>
+              <option value="Revendedora Ouro">Revendedora Ouro</option>
+              <option value="Consultor de Vendas">Consultor de Vendas</option>
+              <option value="Atendente">Atendente</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="usr-tel">Telefone / WhatsApp</label>
+            <input 
+              id="usr-tel" 
+              type="text" 
+              [(ngModel)]="formUsuario.telefone" 
+              name="telefone" 
+              placeholder="(11) 99999-9999">
+          </div>
+
+          <div class="campo">
+            <label for="usr-avatar">Ícone / Letra do Avatar</label>
+            <input 
+              id="usr-avatar" 
+              type="text" 
+              maxlength="2" 
+              [(ngModel)]="formUsuario.avatar" 
+              name="avatar" 
+              placeholder="Ex: B">
+          </div>
+
+          <div class="campo">
+            <label for="usr-status">Status</label>
+            <select id="usr-status" [(ngModel)]="formUsuario.status" name="status">
+              <option value="Ativo">Ativo</option>
+              <option value="Inativo">Inativo</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="usr-loja">Nome da Loja / Espaço</label>
+            <input 
+              id="usr-loja" 
+              type="text" 
+              [(ngModel)]="formUsuario.nomeLoja" 
+              name="nomeLoja" 
+              placeholder="Ex: Espaço O Boticário">
+          </div>
+
+          <div class="campo">
+            <label for="usr-banner">Frase do Banner Principal</label>
+            <input 
+              id="usr-banner" 
+              type="text" 
+              [(ngModel)]="formUsuario.fraseBanner" 
+              name="fraseBanner" 
+              placeholder="Ex: Beleza que transforma">
+          </div>
+
+          <div class="campo">
+            <label for="usr-subtitulo">Subtítulo do Banner</label>
+            <input 
+              id="usr-subtitulo" 
+              type="text" 
+              [(ngModel)]="formUsuario.subtituloBanner" 
+              name="subtituloBanner" 
+              placeholder="Descrição personalizada">
+          </div>
+
+          <div class="campo">
+            <label for="usr-cres-vendas">Indicador de Crescimento Vendas (%)</label>
+            <input 
+              id="usr-cres-vendas" 
+              type="number" 
+              [(ngModel)]="formUsuario.percentualCrescimentoVendas" 
+              name="percentualCrescimentoVendas">
+          </div>
+
+          <div class="campo">
+            <label for="usr-cres-fat">Indicador de Crescimento Faturamento (%)</label>
+            <input 
+              id="usr-cres-fat" 
+              type="number" 
+              [(ngModel)]="formUsuario.percentualCrescimentoFaturamento" 
+              name="percentualCrescimentoFaturamento">
+          </div>
+
+          <div class="campo">
+            <label for="usr-cres-ticket">Indicador de Crescimento Ticket (%)</label>
+            <input 
+              id="usr-cres-ticket" 
+              type="number" 
+              [(ngModel)]="formUsuario.percentualCrescimentoTicket" 
+              name="percentualCrescimentoTicket">
+          </div>
+        </div>
+
+        <div class="rodape-form">
+          <button type="button" class="btn-cancelar" (click)="abaAtiva = 'gerenciar'">Cancelar</button>
+          <button type="submit" class="btn-salvar">
+            {{ modoEdicao ? 'Salvar Alterações' : 'Salvar no Banco' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ABA 3: GERENCIADOR DO BANCO JSON -->
+    <div class="aba-conteudo" *ngIf="abaAtiva === 'backup'">
+      <div class="backup-section">
+        <h3>📦 Arquitetura de Armazenamento JSON</h3>
+        <p>
+          O sistema utiliza arquivos JSON estruturados para armazenar todas as tabelas e entidades (Usuários, Clientes, Produtos, Vendas e Financeiro). As alterações dinâmicas realizadas são persistidas em tempo real.
+        </p>
+
+        <div class="acoes-backup">
+          <div class="card-acao">
+            <h4>Exportar Banco de Dados</h4>
+            <p>Baixe uma cópia completa de todos os dados atuais em um arquivo <code>.json</code> estruturado.</p>
+            <button type="button" class="btn-backup exportar" (click)="exportarJson()">
+              ⬇️ Exportar Banco (.json)
+            </button>
+          </div>
+
+          <div class="card-acao">
+            <h4>Importar Banco de Dados</h4>
+            <p>Carregue um arquivo JSON com dados de usuários, estoque e clientes para atualizar o sistema.</p>
+            <label class="btn-backup importar">
+              ⬆️ Carregar Arquivo JSON
+              <input type="file" accept=".json" (change)="importarJson($event)" style="display: none;">
+            </label>
+          </div>
+
+          <div class="card-acao perigo">
+            <h4>Restaurar Padrão de Fábrica</h4>
+            <p>Restaura os arquivos JSON de semente inicial (resetando modificações locais).</p>
+            <button type="button" class="btn-backup resetar" (click)="resetarBanco()">
+              🔄 Restaurar Dados Iniciais
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

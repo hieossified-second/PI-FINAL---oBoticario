@@ -1,0 +1,78 @@
+<div class="layout-loja">
+  <app-menu-loja></app-menu-loja>
+
+  <main class="principal">
+    <div class="conteudo">
+      <header class="topo">
+        <input class="busca-topo" type="search" [(ngModel)]="termoBusca"
+               placeholder="Buscar produtos, marcas e muito mais...">
+        <div class="topo-direita">
+          <span class="usuario">Olá, {{ usuario }}</span>
+          <a routerLink="/loja" class="carrinho-topo">
+            Carrinho <span class="badge">{{ totalCarrinho }}</span>
+          </a>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div>
+          <h2>Mais beleza<br>para o seu dia</h2>
+          <p>Cuide de você com produtos que unem ciência, natureza e bem-estar.</p>
+          <a routerLink="/produtos" class="btn-contorno">Conheça nossa linha de produtos →</a>
+        </div>
+        <div class="foto">imagem dos produtos</div>
+        <ul class="beneficios">
+          <li>Produtos originais e de qualidade</li>
+          <li>Entrega para todo o Brasil</li>
+          <li>Pagamento seguro</li>
+        </ul>
+      </section>
+
+      <nav class="categorias">
+        <a routerLink="/produtos"><span class="icone"></span>Perfumes →</a>
+        <a routerLink="/produtos"><span class="icone"></span>Cuidados com o corpo →</a>
+        <a routerLink="/produtos"><span class="icone"></span>Cuidados com o rosto →</a>
+        <a routerLink="/produtos"><span class="icone"></span>Cabelos →</a>
+        <a routerLink="/produtos"><span class="icone"></span>Maquiagem →</a>
+        <a routerLink="/produtos"><span class="icone"></span>Presentes →</a>
+      </nav>
+
+      <section>
+        <div class="secao-topo">
+          <div>
+            <h3>Destaques da semana</h3>
+            <p class="sub">Nossos produtos mais amados, escolhidos por você.</p>
+          </div>
+          <a routerLink="/produtos">Ver todos os produtos →</a>
+        </div>
+
+        <div class="produtos">
+          <article class="produto" *ngFor="let prod of produtosFiltrados">
+            <span class="selo" *ngIf="prod.selo">{{ prod.selo }}</span>
+            <div class="foto" [routerLink]="['/produtos']" style="cursor: pointer;">foto</div>
+            <h4>{{ prod.nome }}</h4>
+            <small>{{ prod.subtitulo }}</small>
+            <span class="estrelas">{{ prod.avaliacao }} ({{ prod.totalAvaliacoes }})</span>
+            <span class="preco">{{ formatarMoeda(prod.preco) }}</span>
+            <button type="button" class="btn-verde" (click)="adicionar(prod)">
+              Adicionar ao carrinho
+            </button>
+          </article>
+        </div>
+      </section>
+
+      <section class="promos">
+        <div class="promo">
+          <h3>Presenteie quem você ama</h3>
+          <p>Kits especiais para todas as ocasiões.</p>
+          <a routerLink="/produtos" class="btn-contorno">Ver kits de presentes →</a>
+        </div>
+        <div class="promo claro">
+          <h3>Seu momento<br>de cuidado</h3>
+          <p>Todo dia é um bom dia para se sentir bem.</p>
+          <a routerLink="/produtos" class="btn-contorno">Conheça mais →</a>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,141 @@
+:host {
+  display: flex;
+  flex-shrink: 0;
+}
+
+aside {
+  display: flex;
+  flex-direction: column;
+  width: 210px;
+  min-height: 100vh;
+  padding: 20px 14px;
+  color: #ffffff;
+  background: #022d25;
+}
+
+aside h1 {
+  margin: 0 14px 31px;
+  color: #ffffff;
+  font-family: Georgia, serif;
+  font-size: 21px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+aside nav ul {
+  list-style: none;
+  display: grid;
+  gap: 4px;
+  padding: 0;
+  margin: 0;
+}
+
+aside nav a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+  border-radius: 8px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 13px;
+  transition: background 0.2s ease;
+}
+
+aside nav a:hover,
+aside nav a.ativo {
+  background: #115342;
+}
+
+/* =========================================================
+   Botão de Login translúcido com zoom isolado
+   ========================================================= */
+aside nav a.btn-login-menu {
+  margin-top: 12px;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transform-origin: center;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+aside nav a.btn-login-menu:hover,
+aside nav a.btn-login-menu.ativo {
+  transform: scale(1.06);
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+aside nav a.btn-login-menu:active {
+  transform: scale(1.02);
+}
+
+.badge {
+  display: grid;
+  place-items: center;
+  min-width: 21px;
+  height: 21px;
+  padding: 0 5px;
+  border-radius: 50%;
+  color: #06392e;
+  background: #f2f5f1;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.slogan {
+  margin: auto 0 0 10px;
+  font: italic 16px/1.1 Georgia, serif;
+}
+
+.slogan small {
+  display: block;
+  margin-top: 14px;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-style: normal;
+}
+
+@media (max-width: 760px) {
+  :host {
+    width: 100%;
+  }
+
+  aside {
+    width: 100%;
+    min-height: auto;
+    padding: 13px 15px;
+  }
+
+  aside h1 {
+    margin: 0 0 12px;
+  }
+
+  aside nav ul {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    overflow-x: auto;
+    padding: 4px 0;
+  }
+
+  aside nav a {
+    padding: 8px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  aside nav a.btn-login-menu {
+    margin-top: 0;
+    padding: 8px 14px;
+    flex-shrink: 0;
+  }
+
+  .slogan {
+    display: none;
+  }
+}

@@ -1,0 +1,164 @@
+<div class="layout-loja">
+  <app-menu-loja></app-menu-loja>
+
+  <main class="principal">
+    <div class="conteudo">
+      <header class="topo">
+        <input class="busca-topo" type="search" [(ngModel)]="termoBusca"
+               placeholder="Buscar produtos, marcas e muito mais...">
+        <div class="topo-direita">
+          <span class="usuario">Olá, {{ usuario }}</span>
+          <a routerLink="/loja" class="carrinho-topo">
+            Carrinho <span class="badge">{{ totalCarrinho }}</span>
+          </a>
+        </div>
+      </header>
+
+      <div class="produto-pagina">
+        <div class="coluna-principal">
+          <nav class="migalhas">
+            <a routerLink="/inicio">Início</a>
+            <span>›</span>
+            <a routerLink="/produtos">Produtos</a>
+            <span>›</span>
+            <span>{{ produtoPrincipal.categoria }}</span>
+            <span>›</span>
+            <span>{{ produtoPrincipal.nome }}</span>
+          </nav>
+
+          <section class="produto-grid">
+            <div class="galeria">
+              <div class="miniaturas">
+                <button type="button" *ngFor="let foto of [1,2,3,4,5]; let i = index"
+                        class="miniatura" [class.ativa]="fotoAtiva === i"
+                        (click)="fotoAtiva = i"></button>
+              </div>
+
+              <div class="foto-principal">
+                Foto {{ fotoAtiva + 1 }} - {{ produtoPrincipal.nome }}
+                <button type="button" class="seta-galeria anterior" (click)="mudarFoto(-1)">‹</button>
+                <button type="button" class="seta-galeria proximo" (click)="mudarFoto(1)">›</button>
+              </div>
+            </div>
+
+            <div class="info">
+              <span class="selo" *ngIf="produtoPrincipal.selo">{{ produtoPrincipal.selo }}</span>
+              <h2>{{ produtoPrincipal.nome }}</h2>
+              <p class="subtitulo">{{ produtoPrincipal.subtitulo }}</p>
+              <p class="avaliacao">
+                <span class="estrelas">{{ produtoPrincipal.avaliacao }}</span> ({{ produtoPrincipal.totalAvaliacoes }})
+              </p>
+
+              <p class="descricao">{{ produtoPrincipal.descricao }}</p>
+
+              <div class="selos-produto">
+                <div class="selo-item"><span class="icone"></span>Vegano</div>
+                <div class="selo-item"><span class="icone"></span>Cruelty Free</div>
+                <div class="selo-item"><span class="icone"></span>Com refil</div>
+              </div>
+
+              <div class="preco-linha">
+                <span class="preco-grande">{{ formatarMoeda(produtoPrincipal.preco) }}</span>
+                <span class="preco-antigo" *ngIf="produtoPrincipal.precoAntigo">
+                  {{ formatarMoeda(produtoPrincipal.precoAntigo) }}
+                </span>
+                <span class="desconto" *ngIf="produtoPrincipal.desconto">{{ produtoPrincipal.desconto }}</span>
+              </div>
+              <p class="parcelas">ou em até 6x de {{ formatarMoeda(produtoPrincipal.preco / 6) }} sem juros</p>
+
+              <div class="compra">
+                <div class="quantidade">
+                  <button type="button" (click)="alterarQtd(-1)">−</button>
+                  <span>{{ quantidade }}</span>
+                  <button type="button" (click)="alterarQtd(1)">+</button>
+                </div>
+                <button type="button" class="btn-comprar" (click)="adicionarPrincipal()">
+                  Adicionar ao carrinho
+                </button>
+                <button type="button" class="btn-favorito" (click)="favorito = !favorito">
+                  {{ favorito ? 'Favoritado ♥' : 'Favoritar' }}
+                </button>
+              </div>
+
+              <div class="garantias-produto">
+                <div class="garantia-item">
+                  <span class="icone"></span>
+                  <div><b>Entrega segura</b><small>em todo o Brasil.</small></div>
+                </div>
+                <div class="garantia-item">
+                  <span class="icone"></span>
+                  <div><b>Embalagem especial</b><small>para presente</small></div>
+                </div>
+                <div class="garantia-item">
+                  <span class="icone"></span>
+                  <div><b>Troca e devolução</b><small>em até 30 dias</small></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <nav class="abas-produto">
+              <button type="button" class="aba-produto" [class.ativa]="abaSugestao === 0" (click)="abaSugestao = 0">
+                Você também pode gostar
+              </button>
+              <button type="button" class="aba-produto" [class.ativa]="abaSugestao === 1" (click)="abaSugestao = 1">
+                Produtos da mesma linha
+              </button>
+            </nav>
+
+            <div class="carrossel">
+              <div class="cards">
+                <article class="card" *ngFor="let sug of sugestoes">
+                  <div class="foto" (click)="selecionarProduto(sug)" style="cursor: pointer;"></div>
+                  <h4>{{ sug.nome }}</h4>
+                  <small>{{ sug.subtitulo }}</small>
+                  <span class="estrelas">{{ sug.avaliacao }} <em>({{ sug.totalAvaliacoes }})</em></span>
+                  <span class="preco">{{ formatarMoeda(sug.preco) }}</span>
+                  <button type="button" class="btn-verde" (click)="adicionarSugestao(sug)">
+                    Adicionar ao carrinho
+                  </button>
+                </article>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="lateral">
+          <section class="cartao">
+            <h3>Detalhes do produto</h3>
+            <details open>
+              <summary>Descrição completa</summary>
+              <p>{{ produtoPrincipal.descricao || 'Fragrância marcante com ingredientes selecionados.' }}</p>
+            </details>
+            <details>
+              <summary>Notas olfativas</summary>
+              <p>Notas de topo frutadas, corpo floral envolvente e fundo amadeirado suave.</p>
+            </details>
+            <details>
+              <summary>Modo de uso</summary>
+              <p>Aplique a certa distância da pele, após o banho.</p>
+            </details>
+          </section>
+
+          <section class="cartao frete">
+            <h3>Calcule o frete e o prazo de entrega</h3>
+            <form (ngSubmit)="calcularFrete()">
+              <input type="text" [(ngModel)]="cep" name="cep" placeholder="Digite seu CEP">
+              <button type="submit">Calcular</button>
+            </form>
+            <p *ngIf="resultadoFrete" style="margin-top: 10px; font-size: 12px; color: #115342;">
+              {{ resultadoFrete }}
+            </p>
+          </section>
+
+          <section class="cartao presente">
+            <h3>Presenteie<br>com beleza</h3>
+            <p>Embalagens especiais e kits exclusivos para tornar cada momento ainda mais único.</p>
+            <a routerLink="/inicio" class="btn-escuro">Ver opções de presente →</a>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

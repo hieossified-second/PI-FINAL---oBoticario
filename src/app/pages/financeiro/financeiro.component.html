@@ -1,0 +1,177 @@
+<app-menu></app-menu>
+
+<main class="conteudo">
+    <header class="topo">
+        <input type="search" placeholder="Buscar no sistema..." [(ngModel)]="termoBusca" (input)="filtrarMovimentacoes()">
+        <p (click)="abrirModalUsuario()" style="cursor: pointer;" title="Gerenciar Usuários & Banco JSON">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #2b6b53; color: white; font-weight: bold; font-size: 11px; margin-right: 5px;">{{ usuarioAtual.avatar || 'A' }}</span>
+            Olá, {{ usuarioAtual.nome || 'Administrador' }} ⚙️
+        </p>
+    </header>
+
+    <section class="cabecalho">
+        <div>
+            <h1>Financeiro</h1>
+            <p>Acompanhe o faturamento, despesas e o fluxo financeiro dinâmico da loja.</p>
+        </div>
+
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <select [(ngModel)]="mesSelecionado" (change)="filtrarMovimentacoes()">
+                <option *ngFor="let m of listaMeses" [value]="m">{{ m }}</option>
+            </select>
+
+            <button type="button" class="btn-nova-transacao" (click)="abrirModalNovo()">
+                + Nova movimentação
+            </button>
+        </div>
+    </section>
+
+    <section class="resumos">
+        <div class="cartao">
+            <p>Receita total</p>
+            <strong>{{ formatarMoeda(receitaTotal) }}</strong>
+            <small>+ {{ usuarioAtual.percentualCrescimentoReceita || 15 }}%</small>
+        </div>
+        <div class="cartao despesa">
+            <p>Despesas totais</p>
+            <strong>{{ formatarMoeda(despesasTotal) }}</strong>
+            <small>- {{ usuarioAtual.percentualCrescimentoDespesas || 8 }}%</small>
+        </div>
+        <div class="cartao">
+            <p>Lucro líquido</p>
+            <strong>{{ formatarMoeda(lucroLiquido) }}</strong>
+            <small>+ {{ usuarioAtual.percentualCrescimentoLucro || 18 }}%</small>
+        </div>
+    </section>
+
+    <section class="graficos">
+        <div class="painel">
+            <h2>Faturamento dos últimos 7 dias</h2>
+            <div class="grafico">
+                <div class="valores">
+                    <span *ngFor="let escala of escalasGrafico">{{ escala }}</span>
+                </div>
+                <div class="barras">
+                    <div class="coluna" *ngFor="let col of barrasGrafico">
+                        <div [style.height.%]="col.altura" [title]="col.label + ': ' + formatarMoeda(col.valor)"></div>
+                        <span>{{ col.label }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="painel">
+            <h2>Despesas por categoria</h2>
+            <div class="categorias">
+                <div class="grafico-redondo" [style.background]="gradienteConico"></div>
+                <ul>
+                    <li *ngFor="let cat of despesasCategorias">
+                        <span class="cor" [ngClass]="cat.classe"></span>
+                        {{ cat.nome }} <b>{{ cat.percentual }}%</b>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="painel movimentacoes">
+        <h2>Movimentações recentes</h2>
+        <div class="tabela">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Descrição</th>
+                        <th>Categoria</th>
+                        <th>Valor</th>
+                        <th>Tipo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let mov of movimentacoesFiltradas">
+                        <td>{{ mov.data }}</td>
+                        <td>{{ mov.descricao }}</td>
+                        <td>{{ mov.categoria }}</td>
+                        <td [class.entrada]="mov.tipo === 'Receita'" [class.saida]="mov.tipo === 'Despesa'">
+                            {{ mov.tipo === 'Receita' ? '+' : '-' }}{{ formatarMoeda(mov.valor) }}
+                        </td>
+                        <td [class.entrada]="mov.tipo === 'Receita'" [class.saida]="mov.tipo === 'Despesa'">
+                            {{ mov.tipo }}
+                        </td>
+                        <td>
+                            <button class="btn-del-transacao" type="button" (click)="excluirTransacao(mov.id)" title="Excluir movimentação">
+                                🗑️
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="movimentacoesFiltradas.length === 0">
+                        <td colspan="6" style="text-align: center; color: #888; padding: 20px;">
+                            Nenhuma movimentação financeira registrada.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<!-- Modal Dinâmico de Nova Movimentação Financeira -->
+<div class="modal-backdrop" *ngIf="modalAberto" (click)="fecharModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+        <header class="modal-box-header">
+            <h3>Nova Movimentação Financeira</h3>
+            <button type="button" class="btn-close" (click)="fecharModal()">&times;</button>
+        </header>
+
+        <form (ngSubmit)="salvarTransacao()" class="form-fin-modal">
+            <div class="grid-2">
+                <div class="campo-grupo">
+                    <label>Tipo de Movimentação *</label>
+                    <select [(ngModel)]="formTransacao.tipo" name="tipo">
+                        <option value="Receita">Receita (Entrada +)</option>
+                        <option value="Despesa">Despesa (Saída -)</option>
+                    </select>
+                </div>
+
+                <div class="campo-grupo">
+                    <label>Valor (R$) *</label>
+                    <input type="number" step="0.01" min="0.01" [(ngModel)]="formTransacao.valor" name="valor" required>
+                </div>
+            </div>
+
+            <div class="campo-grupo">
+                <label>Descrição *</label>
+                <input type="text" [(ngModel)]="formTransacao.descricao" name="descricao" placeholder="Ex: Venda de perfumes, Aluguel..." required>
+            </div>
+
+            <div class="grid-2">
+                <div class="campo-grupo">
+                    <label>Categoria</label>
+                    <select [(ngModel)]="formTransacao.categoria" name="categoria">
+                        <option value="Vendas">Vendas</option>
+                        <option value="Fornecedores">Fornecedores</option>
+                        <option value="Contas fixas">Contas fixas</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Salários">Salários</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+
+                <div class="campo-grupo">
+                    <label>Data</label>
+                    <input type="text" [(ngModel)]="formTransacao.data" name="data" placeholder="DD/MM/AAAA">
+                </div>
+            </div>
+
+            <div class="modal-acoes">
+                <button type="button" class="btn-cancel" (click)="fecharModal()">Cancelar</button>
+                <button type="submit" class="btn-confirm">Salvar Movimentação</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal de Usuários do Sistema -->
+<app-usuario-modal *ngIf="modalUsuarioAberto" (fechar)="fecharModalUsuario()"></app-usuario-modal>

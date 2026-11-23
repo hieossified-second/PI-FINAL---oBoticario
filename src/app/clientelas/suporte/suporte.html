@@ -1,0 +1,214 @@
+<div class="layout-loja">
+  <app-menu-loja></app-menu-loja>
+
+  <main class="principal">
+    <div class="conteudo">
+      <header class="topo">
+        <input
+          class="busca-topo"
+          type="search"
+          [(ngModel)]="termoBusca"
+          placeholder="Buscar dúvidas sobre entregas, trocas, pagamentos..."
+        />
+        <div class="topo-direita">
+          <span class="usuario">Olá, {{ usuario }}</span>
+          <a routerLink="/loja" class="carrinho-topo">
+            Carrinho <span class="badge">{{ totalCarrinho }}</span>
+          </a>
+        </div>
+      </header>
+
+      <section class="hero-suporte">
+        <div class="hero-texto">
+          <span class="hero-tag">Atendimento ao Cliente</span>
+          <h2>Como podemos ajudar você?</h2>
+          <p>Encontre respostas rápidas ou fale diretamente com a nossa equipe de suporte.</p>
+
+          <div class="busca-ajuda">
+            <input
+              type="search"
+              [(ngModel)]="termoBusca"
+              placeholder="Digite sua dúvida (ex: prazo, troca, frete...)"
+            />
+            <button type="button" (click)="categoriaAtiva = 'Todas'">Limpar filtro</button>
+          </div>
+        </div>
+
+        <p class="frase">“Cuidar de você em cada detalhe faz parte da nossa essência.”</p>
+      </section>
+
+      <!-- Tópicos rápidos -->
+      <section class="topicos">
+        <button
+          type="button"
+          class="topico"
+          [class.ativo]="categoriaAtiva === 'Entregas'"
+          (click)="selecionarTopico('Entregas', 'Dúvida sobre pedido')"
+        >
+          <span class="icone">🚚</span>
+          <div>
+            <h3>Entregas e prazos</h3>
+            <p>Rastreamento, frete e prazos de envio</p>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          class="topico"
+          [class.ativo]="categoriaAtiva === 'Trocas'"
+          (click)="selecionarTopico('Trocas', 'Troca ou devolução')"
+        >
+          <span class="icone">🔄</span>
+          <div>
+            <h3>Trocas e devoluções</h3>
+            <p>Solicitações em até 30 dias corridos</p>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          class="topico"
+          [class.ativo]="categoriaAtiva === 'Pagamentos'"
+          (click)="selecionarTopico('Pagamentos', 'Pagamento e reembolso')"
+        >
+          <span class="icone">💳</span>
+          <div>
+            <h3>Pagamentos</h3>
+            <p>Cartão, Pix, parcelas e estornos</p>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          class="topico"
+          [class.ativo]="categoriaAtiva === 'Conta'"
+          (click)="selecionarTopico('Conta', 'Produtos e sustentabilidade')"
+        >
+          <span class="icone">🌿</span>
+          <div>
+            <h3>Produtos e linha</h3>
+            <p>Refis, ingredientes e selo vegano</p>
+          </div>
+        </button>
+      </section>
+
+      <!-- Grid principal: FAQ + Formulário de Contato -->
+      <section class="suporte-grid">
+        <div class="cartao faq">
+          <div class="faq-cab">
+            <div>
+              <h3>Perguntas frequentes</h3>
+              <p class="sub">Clique em uma pergunta para visualizar a resposta completa.</p>
+            </div>
+            <button
+              *ngIf="categoriaAtiva !== 'Todas'"
+              type="button"
+              class="btn-limpar-cat"
+              (click)="categoriaAtiva = 'Todas'"
+            >
+              Ver todas ({{ perguntas.length }})
+            </button>
+          </div>
+
+          <div class="faq-vazio" *ngIf="perguntasFiltradas.length === 0">
+            Nenhuma pergunta encontrada para "{{ termoBusca }}". Envie sua dúvida pelo formulário ao lado!
+          </div>
+
+          <details *ngFor="let item of perguntasFiltradas; let first = first" [open]="first">
+            <summary>
+              <span>
+                <em class="tag-cat">{{ item.categoria }}</em>
+                {{ item.pergunta }}
+              </span>
+            </summary>
+            <p>{{ item.resposta }}</p>
+          </details>
+        </div>
+
+        <div class="cartao contato">
+          <h3>Fale com a gente</h3>
+          <p class="sub">Preencha os dados abaixo e responderemos em até 24 horas úteis.</p>
+
+          <div class="alerta-sucesso" *ngIf="protocoloGerado">
+            <strong>Solicitação enviada com sucesso!</strong>
+            <span>Protocolo de atendimento: <b>{{ protocoloGerado }}</b></span>
+          </div>
+
+          <form (ngSubmit)="enviarMensagem()">
+            <div class="campo">
+              <label for="nomeContato">Seu nome</label>
+              <input
+                id="nomeContato"
+                type="text"
+                name="nomeContato"
+                [(ngModel)]="nomeContato"
+                placeholder="Digite seu nome completo"
+                required
+              />
+            </div>
+
+            <div class="campo">
+              <label for="emailContato">E-mail para retorno</label>
+              <input
+                id="emailContato"
+                type="email"
+                name="emailContato"
+                [(ngModel)]="emailContato"
+                placeholder="seuemail@exemplo.com"
+                required
+              />
+            </div>
+
+            <div class="campo-duplo">
+              <div class="campo">
+                <label for="assuntoContato">Assunto</label>
+                <select id="assuntoContato" name="assuntoContato" [(ngModel)]="assuntoContato">
+                  <option value="Dúvida sobre pedido">Dúvida sobre pedido</option>
+                  <option value="Troca ou devolução">Troca ou devolução</option>
+                  <option value="Pagamento e reembolso">Pagamento e reembolso</option>
+                  <option value="Produtos e sustentabilidade">Produtos e sustentabilidade</option>
+                  <option value="Elogios ou sugestões">Elogios ou sugestões</option>
+                </select>
+              </div>
+
+              <div class="campo">
+                <label for="numeroPedido">Nº do pedido (opcional)</label>
+                <input
+                  id="numeroPedido"
+                  type="text"
+                  name="numeroPedido"
+                  [(ngModel)]="numeroPedido"
+                  placeholder="Ex: #OB-202601"
+                />
+              </div>
+            </div>
+
+            <div class="campo">
+              <label for="mensagemContato">Mensagem</label>
+              <textarea
+                id="mensagemContato"
+                name="mensagemContato"
+                [(ngModel)]="mensagemContato"
+                placeholder="Descreva como podemos te ajudar..."
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn-enviar">Enviar solicitação</button>
+          </form>
+
+          <div class="canais">
+            <div class="canal">
+              <b>📞 Central Telefônica</b>
+              <span>0800 41 3011 (Seg a Sáb, 8h às 20h)</span>
+            </div>
+            <div class="canal">
+              <b>💬 Atendimento Digital</b>
+              <span>suporte&#64;oboticario.com.br</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>

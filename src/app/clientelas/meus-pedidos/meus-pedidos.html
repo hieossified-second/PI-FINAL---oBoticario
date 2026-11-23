@@ -1,0 +1,165 @@
+<div class="layout-loja">
+  <app-menu-loja></app-menu-loja>
+
+  <main class="principal">
+    <div class="conteudo">
+      <header class="topo">
+        <input
+          class="busca-topo"
+          type="search"
+          [(ngModel)]="termoBusca"
+          placeholder="Buscar por número do pedido ou nome do produto..."
+        />
+        <div class="topo-direita">
+          <span class="usuario">Olá, {{ usuario }}</span>
+          <a routerLink="/loja" class="carrinho-topo">
+            Carrinho <span class="badge">{{ totalCarrinho }}</span>
+          </a>
+        </div>
+      </header>
+
+      <section class="hero-pedidos">
+        <div class="hero-texto">
+          <span class="hero-tag">Área do Cliente</span>
+          <h2>Meus pedidos</h2>
+          <p>Acompanhe suas compras, prazos de entrega e histórico completo.</p>
+        </div>
+
+        <div class="hero-metricas">
+          <div class="metrica">
+            <strong>{{ pedidos.length }}</strong>
+            <span>Total</span>
+          </div>
+          <div class="metrica">
+            <strong>{{ contarPorStatus('Em andamento') }}</strong>
+            <span>Em andamento</span>
+          </div>
+          <div class="metrica">
+            <strong>{{ contarPorStatus('Entregue') }}</strong>
+            <span>Entregues</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="barra-filtros">
+        <div class="filtros">
+          <button
+            type="button"
+            class="filtro"
+            [class.ativo]="filtroStatus === 'Todos'"
+            (click)="filtroStatus = 'Todos'"
+          >
+            Todos ({{ pedidos.length }})
+          </button>
+          <button
+            type="button"
+            class="filtro"
+            [class.ativo]="filtroStatus === 'Em andamento'"
+            (click)="filtroStatus = 'Em andamento'"
+          >
+            Em andamento ({{ contarPorStatus('Em andamento') }})
+          </button>
+          <button
+            type="button"
+            class="filtro"
+            [class.ativo]="filtroStatus === 'Entregue'"
+            (click)="filtroStatus = 'Entregue'"
+          >
+            Entregues ({{ contarPorStatus('Entregue') }})
+          </button>
+          <button
+            type="button"
+            class="filtro"
+            [class.ativo]="filtroStatus === 'Cancelado'"
+            (click)="filtroStatus = 'Cancelado'"
+          >
+            Cancelados ({{ contarPorStatus('Cancelado') }})
+          </button>
+        </div>
+
+        <div class="busca-filtro">
+          <input
+            type="search"
+            [(ngModel)]="termoBusca"
+            placeholder="Filtrar por #OB... ou produto"
+          />
+        </div>
+      </div>
+
+      <!-- Estado vazio -->
+      <div class="estado-vazio" *ngIf="pedidosFiltrados.length === 0">
+        <div class="vazio-icone">📦</div>
+        <h3>Nenhum pedido encontrado</h3>
+        <p>Não encontramos pedidos com o filtro selecionado. Que tal explorar nossos produtos?</p>
+        <a routerLink="/inicio" class="btn-verde">Explorar vitrine</a>
+      </div>
+
+      <!-- Lista de pedidos -->
+      <div class="pedidos-lista" *ngIf="pedidosFiltrados.length > 0">
+        <article class="pedido" *ngFor="let pedido of pedidosFiltrados">
+          <header class="pedido-cab">
+            <div class="pedido-id">
+              <div class="numero-linha">
+                <h3>Pedido {{ pedido.numero }}</h3>
+                <span
+                  class="status"
+                  [class.andamento]="pedido.status === 'Em andamento'"
+                  [class.entregue]="pedido.status === 'Entregue'"
+                  [class.cancelado]="pedido.status === 'Cancelado'"
+                >
+                  {{ pedido.status }}
+                </span>
+              </div>
+              <small>Realizado em {{ pedido.data }} • Previsão: <b>{{ pedido.previsao }}</b></small>
+            </div>
+
+            <div class="total-topo">
+              <small>Valor total</small>
+              <strong>{{ formatarMoeda(pedido.total) }}</strong>
+            </div>
+          </header>
+
+          <!-- Linha do tempo de entrega -->
+          <div class="stepper" *ngIf="pedido.status !== 'Cancelado'">
+            <div
+              class="step"
+              *ngFor="let etapa of ['Pedido recebido', 'Pagamento aprovado', 'Em transporte', 'Entregue']; let i = index"
+              [class.concluido]="i + 1 < pedido.etapaAtual"
+              [class.atual]="i + 1 === pedido.etapaAtual"
+            >
+              <div class="step-bolinha">
+                <span *ngIf="i + 1 < pedido.etapaAtual">✓</span>
+                <span *ngIf="i + 1 >= pedido.etapaAtual">{{ i + 1 }}</span>
+              </div>
+              <span class="step-label">{{ etapa }}</span>
+            </div>
+          </div>
+
+          <div class="aviso-cancelado" *ngIf="pedido.status === 'Cancelado'">
+            Este pedido foi cancelado. Em caso de dúvidas, acesse a central de suporte.
+          </div>
+
+          <!-- Produtos e ações -->
+          <div class="pedido-corpo">
+            <div class="produtos-pedido">
+              <div class="item-pedido" *ngFor="let item of pedido.itens">
+                <div class="foto">🧴</div>
+                <div>
+                  <b>{{ item.nome }}</b>
+                  <small>Quantidade: {{ item.quantidade }} un.</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="pedido-acoes">
+              <a routerLink="/suporte" class="btn-claro">Preciso de ajuda</a>
+              <button type="button" class="btn-verde" (click)="comprarNovamente(pedido)">
+                Comprar novamente
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </main>
+</div>

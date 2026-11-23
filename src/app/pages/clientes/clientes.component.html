@@ -1,0 +1,155 @@
+<app-menu></app-menu>
+
+<main class="conteudo">
+
+    <header class="topo">
+        <input type="search" placeholder="Buscar no sistema..." [(ngModel)]="termoBusca" (input)="filtrarClientes()">
+        <p (click)="abrirModalUsuario()" style="cursor: pointer;" title="Gerenciar Usuários & Banco JSON">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #2b6b53; color: white; font-weight: bold; font-size: 11px; margin-right: 5px;">{{ usuarioAtual.avatar || 'A' }}</span>
+            Olá, {{ usuarioAtual.nome || 'Administrador' }} ⚙️
+        </p>
+    </header>
+
+    <section class="cabecalho">
+        <div>
+            <h1>Clientes</h1>
+            <p>Gerencie o cadastro dinâmico e consulte os clientes da sua loja.</p>
+        </div>
+
+        <button type="button" (click)="abrirModalNovo()">+ Cadastrar cliente</button>
+    </section>
+
+    <section class="painel">
+
+        <div class="filtros">
+            <input type="search" placeholder="Buscar cliente por nome, CPF, e-mail..." [(ngModel)]="termoBusca" (input)="filtrarClientes()">
+
+            <select [(ngModel)]="filtroTipo" (change)="filtrarClientes()">
+                <option value="Todos os tipos">Todos os tipos</option>
+                <option value="Pessoa física">Pessoa física</option>
+                <option value="Pessoa jurídica">Pessoa jurídica</option>
+            </select>
+
+            <select [(ngModel)]="ordem" (change)="filtrarClientes()">
+                <option value="Nome (A-Z)">Nome (A-Z)</option>
+                <option value="Nome (Z-A)">Nome (Z-A)</option>
+            </select>
+        </div>
+
+        <div class="tabela">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Telefone</th>
+                        <th>Tipo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr 
+                        *ngFor="let cliente of clientesFiltrados" 
+                        (click)="selecionarCliente(cliente)"
+                        [class.linha-selecionada]="cliente.id === clienteSelecionado?.id"
+                        style="cursor: pointer;">
+                        <td><strong>{{ cliente.nome }}</strong></td>
+                        <td>{{ cliente.cpf }}</td>
+                        <td>{{ cliente.telefone }}</td>
+                        <td>{{ cliente.tipo }}</td>
+                        <td>
+                            <button class="editar" type="button" (click)="abrirModalEditar(cliente, $event)">Editar</button>
+                            <button class="excluir" type="button" (click)="excluirCliente(cliente.id, $event)">Excluir</button>
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="clientesFiltrados.length === 0">
+                        <td colspan="5" style="text-align: center; color: #888; padding: 24px;">
+                            Nenhum cliente encontrado com os filtros aplicados.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="painel detalhes">
+        <h2>Detalhes do cliente</h2>
+
+        <div class="dados" *ngIf="clienteSelecionado; else semSelecao">
+            <p><strong>Nome:</strong> {{ clienteSelecionado.nome }}</p>
+            <p><strong>CPF:</strong> {{ clienteSelecionado.cpf }}</p>
+            <p><strong>Telefone:</strong> {{ clienteSelecionado.telefone }}</p>
+            <p><strong>E-mail:</strong> {{ clienteSelecionado.email }}</p>
+            <p><strong>Tipo:</strong> {{ clienteSelecionado.tipo }}</p>
+            <p><strong>Cliente desde:</strong> {{ clienteSelecionado.dataCadastro }}</p>
+        </div>
+
+        <ng-template #semSelecao>
+            <p style="color: #777; margin-bottom: 20px;">Nenhum cliente selecionado na tabela.</p>
+        </ng-template>
+
+        <button type="button" *ngIf="clienteSelecionado" (click)="abrirModalEditar(clienteSelecionado)">
+            Editar cadastro
+        </button>
+    </section>
+
+</main>
+
+<!-- Modal Dinâmico de Cadastro / Edição de Cliente -->
+<div class="modal-backdrop" *ngIf="modalAberto" (click)="fecharModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+        <header class="modal-box-header">
+            <h3>{{ modoEdicao ? 'Editar Cliente' : 'Cadastrar Novo Cliente' }}</h3>
+            <button type="button" class="btn-close" (click)="fecharModal()">&times;</button>
+        </header>
+
+        <form (ngSubmit)="salvarCliente()" class="form-cliente-modal">
+            <div class="campo-grupo">
+                <label>Nome Completo *</label>
+                <input type="text" [(ngModel)]="clienteForm.nome" name="nome" placeholder="Ex: Patrícia Alves" required>
+            </div>
+
+            <div class="grid-2">
+                <div class="campo-grupo">
+                    <label>CPF / CNPJ</label>
+                    <input type="text" [(ngModel)]="clienteForm.cpf" name="cpf" placeholder="000.000.000-00">
+                </div>
+
+                <div class="campo-grupo">
+                    <label>Telefone</label>
+                    <input type="text" [(ngModel)]="clienteForm.telefone" name="telefone" placeholder="(11) 98888-7777">
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="campo-grupo">
+                    <label>E-mail</label>
+                    <input type="email" [(ngModel)]="clienteForm.email" name="email" placeholder="cliente@email.com">
+                </div>
+
+                <div class="campo-grupo">
+                    <label>Tipo de Cliente</label>
+                    <select [(ngModel)]="clienteForm.tipo" name="tipo">
+                        <option value="Pessoa física">Pessoa física</option>
+                        <option value="Pessoa jurídica">Pessoa jurídica</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="campo-grupo">
+                <label>Data de Cadastro</label>
+                <input type="text" [(ngModel)]="clienteForm.dataCadastro" name="dataCadastro" placeholder="DD/MM/AAAA">
+            </div>
+
+            <div class="modal-acoes">
+                <button type="button" class="btn-cancel" (click)="fecharModal()">Cancelar</button>
+                <button type="submit" class="btn-confirm">{{ modoEdicao ? 'Salvar Alterações' : 'Salvar Cliente' }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal de Usuários do Sistema -->
+<app-usuario-modal *ngIf="modalUsuarioAberto" (fechar)="fecharModalUsuario()"></app-usuario-modal>
